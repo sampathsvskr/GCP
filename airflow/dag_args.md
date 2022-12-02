@@ -2,7 +2,7 @@
 
 ## **Dag Arguments**
 
-## Mostly used args
+### Mostly used args
 
 
 - The default args will be passed to each operator
@@ -106,7 +106,7 @@ schedule_interval: '@daily'
 - If any task is failed, call the function which is mentioned..
 - Basically we use to trigger email as task failure acknowledgment
 
-## for more dag args, [documentaion](https://airflow.apache.org/docs/apache-airflow/stable/_api/airflow/models/dag/index.html#airflow.models.dag.DAG)
+## for more dag args, [airflow documentaion](https://airflow.apache.org/docs/apache-airflow/stable/_api/airflow/models/dag/index.html#airflow.models.dag.DAG)
 
 
 <br><br><br>
@@ -114,7 +114,9 @@ schedule_interval: '@daily'
 
 ## **Dag Variables**
 
-### **[Default variables Doc](https://airflow.apache.org/docs/apache-airflow/1.10.5/macros.html#default-variables)**
+### **[Airflow default variables doc](https://airflow.apache.org/docs/apache-airflow/1.10.5/macros.html#default-variables)**
+Example DAG py file playing with params
+**[variables_dag.py](https://github.com/sampathsvskr/GCP/blob/main/airflow/dag_files/variables_dag.py)**
 - If we need to access these variables in any operator, we can access from context and if from the dag itself not in operators then use same format as in doc
 - Even though Params can use a variety of types, the default behavior of templates is to provide your task with a string. 
 - You can change this by setting **render_template_as_native_obj=True** as argument while initializing the DAG.
@@ -148,6 +150,9 @@ PythonOperator(
     dag=the_dag
 )
 ```
+
+
+
 
 
 

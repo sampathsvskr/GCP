@@ -1,8 +1,7 @@
-## Airflow API 
-## [documentaion](https://airflow.apache.org/docs/apache-airflow/stable/stable-rest-api-ref.html#tag/DAG)
+## Airflow API documentaion
+https://airflow.apache.org/docs/apache-airflow/stable/stable-rest-api-ref.html#tag/DAG
 
-- For GCP to access composer airflow, need service account details.
-- If GCP cannot fetch then by default, we need to get the service account key json and set the path of that json file to GOOGLE_APPLICATION_CREDENTIALS as env variable.
+- For composer to access airflow, need auth creditionals, if it cannot be fetched by default, we need to set the path of service_account_key json file to GOOGLE_APPLICATION_CREDENTIALS as env variable.
 
 ### Steps to set service_account_key path:
     ### Linux

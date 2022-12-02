@@ -20,8 +20,8 @@ default_args= {
     'email_on_retry': False,
     'retries': 1,
     'retry_delay': timedelta(minutes=5),
-    'end_date': datetime(2022, 6, 1),
-    'dags_are_paused_at_creation' : False
+    'end_date': datetime(2022, 6, 1)
+    
 }
 
 with DAG(dag_id = 'sample_dag',
@@ -75,9 +75,6 @@ schedule_interval: '@daily'
 - When to end the execution of dag
 - Default is run forever
 
-### dags_are_paused_at_creation
-- If set to true, when a new dag is uploaded, it will not trigger on sucesfully import, vice versa for false
-
 ### concurrency
 - No. of tasks to be executed in parallel
 
@@ -110,6 +107,48 @@ schedule_interval: '@daily'
 - Basically we use to trigger email as task failure acknowledgment
 
 ## for more dag args, [documentaion](https://airflow.apache.org/docs/apache-airflow/stable/_api/airflow/models/dag/index.html#airflow.models.dag.DAG)
+
+
+<br><br><br>
+
+
+## **Dag Variables**
+
+### **[Default variables Doc](https://airflow.apache.org/docs/apache-airflow/1.10.5/macros.html#default-variables)**
+- If we need to access these variables in any operator, we can access from context and if from the dag itself not in operators then use same format as in doc
+- Even though Params can use a variety of types, the default behavior of templates is to provide your task with a string. 
+- You can change this by setting **render_template_as_native_obj=True** as argument while initializing the DAG.
+
+```python
+from airflow import DAG
+from airflow.models.param import Param
+
+def print_x(**context):    
+    # extracting user defined params
+    print(context["params"]["x"])
+    
+    # execution date
+    print(context["ds"])
+
+the_dag= DAG(
+    "sample_dag",
+    params={
+        "x": Param(5, type="integer", minimum=3),
+        "y": 6
+    },
+) 
+
+# make sure there is space between parenthesis and param
+# accessing outside operators and inside dag
+y_value= "{{ params.y }}"
+
+PythonOperator(
+    task_id="print_x",
+    python_callable=print_it,
+    dag=the_dag
+)
+```
+
 
 
 

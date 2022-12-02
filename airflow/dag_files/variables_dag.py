@@ -1,3 +1,8 @@
+'''
+This file helps to understand how to access airflow variables or params inside operators or the dag.
+https://airflow.apache.org/docs/apache-airflow/1.10.5/macros.html#default-variables
+'''
+
 from datetime import datetime
 from airflow.utils import dates
 from airflow import DAG

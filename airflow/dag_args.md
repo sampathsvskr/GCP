@@ -106,7 +106,7 @@ schedule_interval: '@daily'
 - If any task is failed, call the function which is mentioned..
 - Basically we use to trigger email as task failure acknowledgment
 
-## for more dag args, [airflow documentaion](https://airflow.apache.org/docs/apache-airflow/stable/_api/airflow/models/dag/index.html#airflow.models.dag.DAG)
+## for more dag args - [airflow documentaion](https://airflow.apache.org/docs/apache-airflow/stable/_api/airflow/models/dag/index.html#airflow.models.dag.DAG)
 
 
 <br><br><br>

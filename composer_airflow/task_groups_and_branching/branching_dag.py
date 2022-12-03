@@ -5,7 +5,7 @@ from airflow import DAG
 from airflow.operators.python import PythonOperator
 from airflow.operators.bash import BashOperator
 from airflow.operators.python import BranchPythonOperator
-from airflow.operators.dummy import DummyOperator
+from airflow.operators.empty import EmptyOperator
 
 
 default_args= {
@@ -54,25 +54,25 @@ def branch_fn3(val):
         print("No branch..")
 
 
-t1 = DummyOperator(task_id="t1", dag=dag)
-t2 = DummyOperator(task_id="t2", dag=dag)
+t1 = EmptyOperator(task_id="t1", dag=dag)
+t2 = EmptyOperator(task_id="t2", dag=dag)
 
 select_barnch1 = BranchPythonOperator(task_id="select_barnch1", python_callable=branch_fn, op_args = [12], dag=dag)
-branch_task1 = DummyOperator(task_id="branch_task1", dag=dag)
-branch_task2 = DummyOperator(task_id="branch_task2", dag=dag)
+branch_task1 = EmptyOperator(task_id="branch_task1", dag=dag)
+branch_task2 = EmptyOperator(task_id="branch_task2", dag=dag)
 
 select_barnch2 = BranchPythonOperator(task_id="select_barnch2", python_callable=branch_fn2, op_args = [5], dag=dag)
-branch_task3 = DummyOperator(task_id="branch_task3" , dag=dag)
-branch_task4 = DummyOperator(task_id="branch_task4", dag=dag)
+branch_task3 = EmptyOperator(task_id="branch_task3" , dag=dag)
+branch_task4 = EmptyOperator(task_id="branch_task4", dag=dag)
 
 select_barnch3 = BranchPythonOperator(task_id="select_barnch3", python_callable=branch_fn3, op_args = [-2] , dag=dag)
-branch_task5 = DummyOperator(task_id="branch_task5", dag=dag)
-branch_task6 = DummyOperator(task_id="branch_task6", dag=dag)
+branch_task5 = EmptyOperator(task_id="branch_task5", dag=dag)
+branch_task6 = EmptyOperator(task_id="branch_task6", dag=dag)
 
 
-t5 = DummyOperator(task_id="t5", dag=dag)
-t6 = DummyOperator(task_id="t6", dag=dag)
-t7 = DummyOperator(task_id="t7", dag=dag)
+t5 = EmptyOperator(task_id="t5", dag=dag)
+t6 = EmptyOperator(task_id="t6", dag=dag)
+t7 = EmptyOperator(task_id="t7", dag=dag)
 
 t1 >> select_barnch1 >> [branch_task1,branch_task2] >> t2 >> select_barnch2
 
@@ -90,10 +90,10 @@ def branch_fn4():
         return ["branch_task9","branch_task10"]
 
 select_barnch4 = BranchPythonOperator(task_id="select_barnch4", python_callable=branch_fn4 , dag=dag)
-branch_task7 = DummyOperator(task_id="branch_task7", dag=dag)
-branch_task8 = DummyOperator(task_id="branch_task8", dag=dag)
-branch_task9 = DummyOperator(task_id="branch_task9", dag=dag)
-branch_task10 = DummyOperator(task_id="branch_task10", dag=dag)
+branch_task7 = EmptyOperator(task_id="branch_task7", dag=dag)
+branch_task8 = EmptyOperator(task_id="branch_task8", dag=dag)
+branch_task9 = EmptyOperator(task_id="branch_task9", dag=dag)
+branch_task10 = EmptyOperator(task_id="branch_task10", dag=dag)
 
 t6 >> select_barnch4 >> [ branch_task7, branch_task8, branch_task9, branch_task10]
     

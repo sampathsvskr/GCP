@@ -24,7 +24,7 @@ default_args= {
     
 }
 
-with DAG(dag_id = 'sample_dag',
+dag= DAG(dag_id = 'sample_dag',
           schedule_interval='@daily',  # Cron expression, here it is a preset of Airflow, @daily means once 
           default_args=default_args,
           description ='sample tutoruial',
@@ -35,7 +35,7 @@ with DAG(dag_id = 'sample_dag',
           tags = ['testing'] ,
           # report failure is a method which triggers smtp mail
           on_failure_callback = report_failure
-            ) as dag:
+            ) 
 
 
 ```

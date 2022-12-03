@@ -6,7 +6,7 @@ Trigger Rule -- > trigger_rule
 from datetime import datetime
 import time
 from airflow import DAG
-from airflow.operators.python_operator import PythonOperator
+from airflow.operators.python import PythonOperator
 from airflow.utils.trigger_rule import TriggerRule
 from airflow.exceptions import AirflowSkipException
 

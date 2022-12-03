@@ -6,7 +6,7 @@ https://airflow.apache.org/docs/apache-airflow/1.10.5/macros.html#default-variab
 from datetime import datetime
 from airflow.utils import dates
 from airflow import DAG
-from airflow.operators.python_operator import PythonOperator
+from airflow.operators.python import PythonOperator
 from airflow.models.param import Param
 
 
@@ -121,14 +121,14 @@ task6 = PythonOperator(
          )
 
 #op_args with multiple params
-def print_arguments(*y , **context):
+def print_arguments1(*y , **context):
     print(y)
     print(context)
 
 task7 = PythonOperator(
             task_id="multiple_params",
             op_args=[ y_value,date_value ],
-            python_callable=print_arguments,
+            python_callable=print_arguments1,
             dag=dag,
             provide_context = True # won't be necesseary in 2s.0
          )

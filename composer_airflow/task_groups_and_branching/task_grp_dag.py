@@ -5,7 +5,7 @@ Creating task groups
 from datetime import datetime
 import time
 from airflow import DAG
-from airflow.operators.python_operator import PythonOperator
+from airflow.operators.python import PythonOperator
 from airflow.utils.task_group import TaskGroup
 
 #sample methods

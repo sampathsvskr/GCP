@@ -6,6 +6,7 @@ from airflow.operators.python import PythonOperator
 from airflow.operators.bash import BashOperator
 from airflow.operators.python import BranchPythonOperator
 from airflow.operators.empty import EmptyOperator
+from airflow.utils.trigger_rule import TriggerRule
 
 
 default_args= {
@@ -30,7 +31,7 @@ dag = DAG("branching_test_dag",
 
 def branch_fn(val):
     print(val)
-    print(val[0])
+    
     if val>10:
         return "branch_task1"
     else:
@@ -55,7 +56,7 @@ def branch_fn3(val):
 
 
 t1 = EmptyOperator(task_id="t1", dag=dag)
-t2 = EmptyOperator(task_id="t2", dag=dag)
+t2 = EmptyOperator(task_id="t2", dag=dag,trigger_rule=TriggerRule.ONE_SUCCESS)
 
 select_barnch1 = BranchPythonOperator(task_id="select_barnch1", python_callable=branch_fn, op_args = [12], dag=dag)
 branch_task1 = EmptyOperator(task_id="branch_task1", dag=dag)
@@ -71,8 +72,8 @@ branch_task6 = EmptyOperator(task_id="branch_task6", dag=dag)
 
 
 t5 = EmptyOperator(task_id="t5", dag=dag)
-t6 = EmptyOperator(task_id="t6", dag=dag)
-t7 = EmptyOperator(task_id="t7", dag=dag)
+t6 = EmptyOperator(task_id="t6", dag=dag,trigger_rule=TriggerRule.ALL_SKIPPED)
+t7 = EmptyOperator(task_id="t7", dag=dag,trigger_rule=TriggerRule.ONE_SUCCESS)
 
 t1 >> select_barnch1 >> [branch_task1,branch_task2] >> t2 >> select_barnch2
 

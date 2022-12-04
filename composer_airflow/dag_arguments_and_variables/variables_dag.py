@@ -20,7 +20,7 @@ def set_variables():
     print(type(json_data))
 
     print("JSON data after deserialization")
-    json_data = Variable.get("json_var",deserialize_json=True)
+    json_data = Variable.get("json_var1",deserialize_json=True)
     print(json_data)
     print(type(json_data))
 
@@ -38,7 +38,7 @@ default_args= {
 }
 
 
-dag = DAG("default_args_test_dag2",
+dag = DAG("variables_test_dag2",
            #schedule_interval=None,
            catchup=False,
            start_date=dates.days_ago(2),           

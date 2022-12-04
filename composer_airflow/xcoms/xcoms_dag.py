@@ -22,7 +22,7 @@ default_args= {
 }
 
 
-dag = DAG("xcom_test_dag",
+dag = DAG("xcom_test_dag1",
            #schedule_interval=None,
            catchup=True,
            start_date=dates.days_ago(2),           
@@ -37,18 +37,20 @@ def push_xcoms():
     return "Practicing xcoms..."
 
 def pull_xcoms(**context):
-    xcom_value= context["ti"].pull_xcom(task_ids="training_models")
+    xcom_value= context["ti"].xcom_pull(task_ids="training_models")
     print(xcom_value)
 
 
 training_models = PythonOperator(
             task_id='training_models',
-            python_callable=push_xcoms
+            python_callable=push_xcoms,
+            dag=dag
         )
 
 storing_models = PythonOperator(
             task_id='storing_models',
-            python_callable=pull_xcoms
+            python_callable=pull_xcoms,
+            dag=dag
         )
 
 training_models >> storing_models
@@ -68,12 +70,14 @@ def pull_xcom_with_pull_xcoms_with_ti(ti):
 
 push_xcom_with_push_xcoms_with_ti_task = PythonOperator(
             task_id='push_xcom_with_push_xcoms_with_ti',
-            python_callable=push_xcom_with_push_xcoms_with_ti
+            python_callable=push_xcom_with_push_xcoms_with_ti,
+            dag=dag
         )
 
 pull_xcom_with_pull_xcoms_with_ti_task = PythonOperator(
             task_id='pull_xcom_with_pull_xcoms_with_ti',
-            python_callable=pull_xcom_with_pull_xcoms_with_ti
+            python_callable=pull_xcom_with_pull_xcoms_with_ti,
+            dag=dag
         )
 
 storing_models >> push_xcom_with_push_xcoms_with_ti_task >> pull_xcom_with_pull_xcoms_with_ti_task
@@ -92,12 +96,14 @@ def pull_xcom_with_pull_xcoms(**context):
 
 push_xcom_with_push_xcoms_task = PythonOperator(
             task_id='push_xcom_with_push_xcoms',
-            python_callable=push_xcom_with_push_xcoms
+            python_callable=push_xcom_with_push_xcoms,
+            dag=dag
         )
 
 pull_xcom_with_pull_xcoms_task = PythonOperator(
             task_id='pull_xcom_with_pull_xcoms',
-            python_callable=pull_xcom_with_pull_xcoms
+            python_callable=pull_xcom_with_pull_xcoms,
+            dag=dag
         )
 
 pull_xcom_with_pull_xcoms_with_ti_task >> push_xcom_with_push_xcoms_task >>  pull_xcom_with_pull_xcoms_task
@@ -119,7 +125,8 @@ def pull_xcom_for_prior_dates(**context):
 
 pull_xcom_for_prior_dates_task = PythonOperator(
             task_id='pull_xcom_for_prior_dates',
-            python_callable=pull_xcom_for_prior_dates
+            python_callable=pull_xcom_for_prior_dates,
+            dag=dag
         )
 
 pull_xcom_with_pull_xcoms_task >>  pull_xcom_for_prior_dates_task
@@ -135,7 +142,8 @@ def pull_xcom_from_multiple_tasks(**context):
 
 pull_xcom_from_multiple_tasks_task = PythonOperator(
             task_id='pull_xcom_from_multiple_tasks',
-            python_callable=pull_xcom_from_multiple_tasks
+            python_callable=pull_xcom_from_multiple_tasks,
+            dag=dag
         )
 
 pull_xcom_for_prior_dates_task >> pull_xcom_from_multiple_tasks_task
@@ -152,19 +160,21 @@ pull_xcom_from_templates_task = PythonOperator(
     python_callable = pull_xcom_from_templates,
     op_kwargs = {
         'models' : '{{ ti.xcom_pull(task_ids="push_xcom_with_push_xcoms",key="ml_models") }}'
-    }
+    },
+    dag=dag
 
 ) 
 
 push_xcom_from_templates_task_bash =  BashOperator(
     task_id = "push_xcom_from_templates_task_bash",
-    bash_command='echo "From Bash ->  {{ ds }}"',
-    xcom_push=True 
+    bash_command='echo "From Bash ->  {{ ds }}"',    
+    dag=dag
 )
 
 pull_xcom_from_templates_task_bash =  BashOperator(
     task_id = "pull_xcom_from_templates_task_bash",
-    bash_command='echo From Bash ->  {{ ti.pull_xcom(task_ids="push_xcom_from_templates_task_bash" }}'
+    bash_command='echo From Bash ->  {{ ti.xcom_pull(task_ids="push_xcom_from_templates_task_bash") }}',
+    dag=dag
      
 )
 

@@ -130,7 +130,7 @@ task7 = PythonOperator(
             op_args=[ y_value,date_value ],
             python_callable=print_arguments1,
             dag=dag,
-            provide_context = True # won't be necesseary in 2s.0
+            provide_context = True # won't be necesseary in 2.0
          )
 
 

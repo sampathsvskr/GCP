@@ -27,17 +27,19 @@ Representation of task status in the table
 - Failed - F
 - Upstream failed - UF
 - Skipped - SK
+- None - N
 
 
-|Parent task state <br> Trigger rule	          | S | F | UF | SK | S,S | S,F | F,F | SK,SK | S,SK | S,F | UF,UF | S,UF | F,UF | SK,UF | S,F,UF,SK | 
-|-----------------	          | - | - | -- | -- | --- | --- | --- | ------ | --- | --- | ----- | ---- | ---- | ---- | --------- |
-|	all_success    |  |  |  |  |  |  |  |  |  |  |  |  |  |  | |
-|	all_failed    |  |  |  |  |  |  |  |  |  |  |  |  |  |  | | 
-|	all_done    |  |  |  |  |  |  |  |  |  |  |  |  |  |  | |
-|	all_skipped    |  |  |  |  |  |  |  |  |  |  |  |  |  |  | |
-|	one_failed    |  |  |  |  |  |  |  |  |  |  |  |  |  |  | |
-|	one_success    |  |  |  |  |  |  |  |  |  |  |  |  |  |  | | 
-|	none_failed    |  |  |  |  |  |  |  |  |  |  |  |  |  |  | |
-|	none_failed_min_one_success    |  |  |  |  |  |  |  |  |  |  |  |  |  |  | |
-|	none_skipped    |  |  |  |  |  |  |  |  |  |  |  |  |  |  | |
-|	always    |  |  |  |  |  |  |  |  |  |  |  |  |  |  | |
+|Parent task state <br> Trigger rule	          | S  | F  | UF | SK | S,S | S,F | F,F | SK,SK | S,SK | SK,F | UF,UF | S,UF | F,UF | SK,UF | S,F,UF,SK | 
+|-----------------	          | - | - | -- | -- | ---  | ---| ---| ------ | --- | --- | ----- | ---- | ---- | ---- | --------- |
+|	all_done                                      | S  | S  | S  | S  | S  | S  | S  | S  | S  | S  | S  | S  | S  | S  | S  |
+|	all_failed                                    | SK | S  | S  | SK | SK | SK | S  | SK | SK | SK | S  | SK | S  | SK | SK | 
+|	all_skipped                                   | SK | SK | N  | S  | SK | SK | SK | S  | SK | SK | N  | SK | SK | N  | SK |
+|	all_success                                   | S  | UF | UF | SK | S  | UF | UF | SK | SK | UF | UF | UF | UF | UF | UF |
+|	always                                        | S  | S  | S  | S  | S  | S  | S  | S  | S  | S  | S  | S  | S  | S  | S |
+|	dymmy                                         | S  | S  | S  | S  | S  | S  | S  | S  | S  | S  | S  | S  | S  | S  | S | 
+|	none_failed_min_one_success                   | S  | UF | UF | SK | S  | UF | UF | SK | S  | UF | UF | UF | UF | UF | UF |
+|	none_failed                                   | S  | UF | UF | S  | S  | UF | UF | S  | S  | UF | UF | UF | UF | UF | UF |
+|	none_skipped                                  | S  | S  | S  | SK | S  | S  | S  | SK | SK | SK | S  | S  | S  | SK | SK |
+|	one_failed                                    | SK | S  | S  | SK | SK | S  | S  | SK | SK | S  | S  | S  | S  | S  | S |
+|   one_success                                   | S  | UF | UF | SK | S  | S  | UF | SK | S  | UF | UF | S  | UF | UF | S |

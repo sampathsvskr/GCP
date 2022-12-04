@@ -40,6 +40,15 @@ dag = generate_dag()
 ```
 <br>
 
-## Defining DAG Arguments
+### **[DAG Arguments](https://github.com/sampathsvskr/GCP/tree/main/composer_airflow/dag_arguments_and_variables)** to get idea of mostly used arguments.
 
-Refer **[DAG Arguments](https://github.com/sampathsvskr/GCP/tree/main/composer_airflow/dag_arguments_and_variables)** to get idea of mostly used arguments.
+### **[Operators](https://github.com/sampathsvskr/GCP/tree/main/composer_airflow/operators)** 
+
+
+### **[Trigger Rules](https://github.com/sampathsvskr/GCP/tree/main/composer_airflow/trigger_rules)** 
+
+### **[XComs](https://github.com/sampathsvskr/GCP/tree/main/composer_airflow/xcoms)** 
+
+### **[Task Groups](https://github.com/sampathsvskr/GCP/tree/main/composer_airflow/task_groups_and_branching)** 
+
+### **[Branching](https://github.com/sampathsvskr/GCP/tree/main/composer_airflow/task_groups_and_branching)** 

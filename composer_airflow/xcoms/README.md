@@ -18,7 +18,7 @@ We need to use Task Instance object to pull or push this xcoms which will be ava
 **[Simple DAG file with Xcoms](https://github.com/sampathsvskr/GCP/blob/main/composer_airflow/xcoms/xcoms_dag.py)**
 
 ### Lets see few ways to push and pull xcoms
-Screen shot of XComs for a DAG <br>
+Screenshot of XComs of a DAG <br>
 <br><br>
 ![alt text](https://github.com/sampathsvskr/GCP/blob/main/composer_airflow/images/xcoms.png)
 <br><br>

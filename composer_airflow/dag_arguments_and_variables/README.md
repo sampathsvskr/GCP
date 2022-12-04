@@ -106,17 +106,17 @@ schedule_interval: '@daily'
 - If any task is failed, call the function which is mentioned..
 - Basically we use to trigger email as task failure acknowledgment
 
-## For a list of all DAG parameters, visit [Airflow documentaion.](https://airflow.apache.org/docs/apache-airflow/stable/_api/airflow/models/dag/index.html#airflow.models.dag.DAG)
+## For the list of all DAG parameters, visit [Airflow documentaion.](https://airflow.apache.org/docs/apache-airflow/stable/_api/airflow/models/dag/index.html#airflow.models.dag.DAG)
 
 
 <br><br><br>
 
 
-## **Dag Variables**
+## **Dag Params**
 
 ### **[Airflow default variables doc](https://airflow.apache.org/docs/apache-airflow/1.10.5/macros.html#default-variables)**
 Example DAG py file playing with params
-**[variables_dag.py](https://github.com/sampathsvskr/GCP/blob/main/airflow/dag_files/variables_dag.py)**
+**[default_args_dag.py](https://github.com/sampathsvskr/GCP/blob/main/airflow/dag_files/default_args_dag.py)**
 - If we need to access these variables in any operator, we can access from context and if from the dag itself not in operators then use same format as in doc
 - Even though Params can use a variety of types, the default behavior of templates is to provide your task with a string. 
 - You can change this by setting **render_template_as_native_obj=True** as argument while initializing the DAG.
@@ -151,6 +151,41 @@ PythonOperator(
 )
 ```
 
+<br>
+<br>
+
+## **Variables**
+
+Airflow Variables are useful for storing and retrieving data at runtime while avoiding hard-coding values and duplicating code in our DAGs.<br>
+They are stored as Key-Value pair in Airflow metadata database.<br>
+
+How to get or set variables?
+- Variables can be set using Airflow UI or ```Variable.set``` in any dag
+- Can get using jinja template ```{{ var.value.<variable_name> }}``` or ```Variable.get```
+
+
+```python
+from airflow.models import Variable
+
+# A way to set the variable
+my_var = Variable.set("first_var","my_value")
+
+# Variable value returned in first_var
+my_var = Variable.get("first_var") 
+
+# If variable is json, use deserialize_json=True to return value as dictionary.
+my_var = Variable.get("first_var",deserialize_json=True) 
+
+# Read variable using jinja template.
+bash_operator=BashOperator(
+    task_id="fetch_variables_using_template",
+    bash_command= 'echo "{{ var.value.first_var }}"'
+)
+```
+
+## Refrences
+### **[Medium Article](https://medium.com/@sukul.teradata/apache-airflow-variables-summary-2281fdf18846)** <br>
+### **[Sample DAG File](https://github.com/sampathsvskr/GCP/blob/main/composer_airflow/dag_arguments_and_variables/variables_dag.py)**
 
 
 

@@ -33,7 +33,7 @@ branch_task1 = EmptyOperator(task_id="branch_task1", dag=dag)
 branch_task2 = EmptyOperator(task_id="branch_task2", dag=dag)
 ```
 ### References 
-**[Artile by Marclamberti branchoperator](https://marclamberti.com/blog/airflow-branchpythonoperator/)**
+**[Artile by Marclamberti branchoperator](https://marclamberti.com/blog/airflow-branchpythonoperator/)** <br>
 **[Simple DAG file with branching](https://github.com/sampathsvskr/GCP/blob/main/composer_airflow/task_groups_and_branching/branching_dag.py)**
 
 Image of the DAG created when using the above mentioned sample DAG file without using trigger rules.<br><br>

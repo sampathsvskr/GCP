@@ -28,25 +28,26 @@ Lets see what will be the state of the current task with the respective trigger 
 For DAG py file which contains all these triggers, refer **[trigger_rule.py](https://github.com/sampathsvskr/GCP/blob/main/composer_airflow/trigger_rules/trigger_rule.py)**
 
 Representation of task status in the table
-- Success or will be executed - S
+- Success - S
 - Failed - F
 - Upstream failed - UF
 - Skipped - SK
 - None - N
+- Will be executed - E
 
 For ex: If parent task state is failed and current task has trigger rule "all_failed", then current gets executed, which is represented as success(S). Hope it will be suceess, cannot decide until the task completes, but refrence here is it will be exectuted because of trigger rule. <br> 
 
 |Parent task state <br> Trigger rule	          | S  | F  | UF | SK | S,S | S,F | F,F | SK,SK | S,SK | SK,F | UF,UF | S,UF | F,UF | SK,UF | S,F,UF,SK | 
 |-----------------	          | - | - | -- | -- | ---  | ---| ---| ------ | --- | --- | ----- | ---- | ---- | ---- | --------- |
-|	all_done                                      | S  | S  | S  | S  | S  | S  | S  | S  | S  | S  | S  | S  | S  | S  | S  |
-|	all_failed                                    | SK | S  | S  | SK | SK | SK | S  | SK | SK | SK | S  | SK | S  | SK | SK | 
-|	all_skipped                                   | SK | SK | N  | S  | SK | SK | SK | S  | SK | SK | N  | SK | SK | N  | SK |
-|	all_success                                   | S  | UF | UF | SK | S  | UF | UF | SK | SK | UF | UF | UF | UF | UF | UF |
-|	always                                        | S  | S  | S  | S  | S  | S  | S  | S  | S  | S  | S  | S  | S  | S  | S |
-|	dymmy                                         | S  | S  | S  | S  | S  | S  | S  | S  | S  | S  | S  | S  | S  | S  | S | 
-|	none_failed_min_one_success                   | S  | UF | UF | SK | S  | UF | UF | SK | S  | UF | UF | UF | UF | UF | UF |
-|	none_failed                                   | S  | UF | UF | S  | S  | UF | UF | S  | S  | UF | UF | UF | UF | UF | UF |
-|	none_skipped                                  | S  | S  | S  | SK | S  | S  | S  | SK | SK | SK | S  | S  | S  | SK | SK |
-|	one_failed                                    | SK | S  | S  | SK | SK | S  | S  | SK | SK | S  | S  | S  | S  | S  | S |
-|   one_success                                   | S  | UF | UF | SK | S  | S  | UF | SK | S  | UF | UF | S  | UF | UF | S |
+|	all_done                                      | E  | E  | E  | E  | E  | E  | E  | E  | E  | E  | E  | E  | E  | E  | E  |
+|	all_failed                                    | SK | E  | E  | SK | SK | SK | E  | SK | SK | SK | E  | SK | E  | SK | SK | 
+|	all_skipped                                   | SK | SK | N  | E  | SK | SK | SK | E  | SK | SK | N  | SK | SK | N  | SK |
+|	all_success                                   | E  | UF | UF | SK | E  | UF | UF | SK | SK | UF | UF | UF | UF | UF | UF |
+|	always                                        | E  | E  | E  | E  | E  | E  | E  | E  | E  | E  | E  | E  | E  | E  | E |
+|	dymmy                                         | E  | E  | E  | E  | E  | E  | E  | E  | E  | E  | E  | E  | E  | E  | E | 
+|	none_failed_min_one_success                   | E  | UF | UF | SK | E  | UF | UF | SK | E  | UF | UF | UF | UF | UF | UF |
+|	none_failed                                   | E  | UF | UF | E  | E  | UF | UF | E  | E  | UF | UF | UF | UF | UF | UF |
+|	none_skipped                                  | E  | E  | E  | SK | E  | E  | E  | SK | SK | SK | E  | E  | E  | SK | SK |
+|	one_failed                                    | SK | E  | E  | SK | SK | E  | E  | SK | SK | E  | E  | E  | E  | E  | E |
+|   one_success                                   | E  | UF | UF | SK | E  | E  | UF | SK | E  | UF | UF | E  | UF | UF | E |
 |   none_failed_or_skipped                           | | | | | | | | | | | |

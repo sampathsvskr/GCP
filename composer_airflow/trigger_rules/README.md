@@ -20,7 +20,7 @@ The following options are available:
 
 <br><br>
 
-Lets see what the state of the current task with the respective trigger rule would be based on it's parent tasks state.
+Lets see what will be the state of the current task with the respective trigger rule based on it's parent tasks state.
 
 Representation of task status in the table
 - Success - S

@@ -28,12 +28,13 @@ Lets see what will be the state of the current task with the respective trigger 
 For DAG py file which contains all these triggers, refer **[trigger_rule.py](https://github.com/sampathsvskr/GCP/blob/main/composer_airflow/trigger_rules/trigger_rule.py)**
 
 Representation of task status in the table
-- Success - S
+- Success or will be executed - S
 - Failed - F
 - Upstream failed - UF
 - Skipped - SK
 - None - N
 
+For ex: If parent task state is failed and current task has trigger rule "all_failed", then current gets executed, which is represented as success(S). Hope it will be suceess, cannot decide until the task completes, but refrence here is it will be exectuted because of trigger rule. <br> 
 
 |Parent task state <br> Trigger rule	          | S  | F  | UF | SK | S,S | S,F | F,F | SK,SK | S,SK | SK,F | UF,UF | S,UF | F,UF | SK,UF | S,F,UF,SK | 
 |-----------------	          | - | - | -- | -- | ---  | ---| ---| ------ | --- | --- | ----- | ---- | ---- | ---- | --------- |

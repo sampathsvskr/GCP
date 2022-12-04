@@ -3,7 +3,10 @@
 ## **Trigger rules**
 
 When you set dependencies between tasks, the default Airflow behavior is to run a task only when all upstream tasks have succeeded. You can use trigger rules to change this default behavior.
-**[Trigger Rules Aiflow doc](https://airflow.apache.org/docs/apache-airflow/stable/concepts/dags.html#trigger-rules)**
+
+### References
+**[Trigger Rules Aiflow doc](https://airflow.apache.org/docs/apache-airflow/stable/concepts/dags.html#trigger-rules)** <br>
+**[Artile by Marclamberti on Trigger Rules](https://marclamberti.com/blog/airflow-trigger-rules-all-you-need-to-know/)**
 
 The following options are available:
 
@@ -21,6 +24,8 @@ The following options are available:
 <br><br>
 
 Lets see what will be the state of the current task with the respective trigger rule based on it's parent tasks state.
+<br> 
+For DAG py file which contains all these triggers, refer **[trigger_rule.py](https://github.com/sampathsvskr/GCP/blob/main/composer_airflow/trigger_rules/trigger_rule.py)**
 
 Representation of task status in the table
 - Success - S
@@ -43,3 +48,4 @@ Representation of task status in the table
 |	none_skipped                                  | S  | S  | S  | SK | S  | S  | S  | SK | SK | SK | S  | S  | S  | SK | SK |
 |	one_failed                                    | SK | S  | S  | SK | SK | S  | S  | SK | SK | S  | S  | S  | S  | S  | S |
 |   one_success                                   | S  | UF | UF | SK | S  | S  | UF | SK | S  | UF | UF | S  | UF | UF | S |
+|   none_failed_or_skipped                           | | | | | | | | | | | |

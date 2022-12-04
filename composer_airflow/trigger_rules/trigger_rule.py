@@ -1,20 +1,20 @@
 '''
 Trigger Rule -- > trigger_rule
- All upstream tasks are in a failed or upstream_failed state
 The trigger_rule must be one of 
 {
-    <TriggerRule.ALL_SUCCESS: 'all_success'>, 
-    <TriggerRule.DUMMY: 'dummy'>, 
-    <TriggerRule.NONE_FAILED_OR_SKIPPED: 'none_failed_or_skipped'>, 
-    <TriggerRule.ALWAYS: 'always'>, 
-    <TriggerRule.ALL_SKIPPED: 'all_skipped'>, 
-    <TriggerRule.NONE_FAILED_MIN_ONE_SUCCESS: 'none_failed_min_one_success'>, 
-    <TriggerRule.NONE_FAILED: 'none_failed'>, 
-    <TriggerRule.NONE_SKIPPED: 'none_skipped'>, 
-    <TriggerRule.ALL_FAILED: 'all_failed'>, 
-    <TriggerRule.ALL_DONE: 'all_done'>, 
-    <TriggerRule.ONE_FAILED: 'one_failed'>, 
-    <TriggerRule.ONE_SUCCESS: 'one_success'>}
+    TriggerRule.ALL_SUCCESS: 'all_success', 
+    TriggerRule.DUMMY: 'dummy', 
+    TriggerRule.NONE_FAILED_OR_SKIPPED: 'none_failed_or_skipped', 
+    TriggerRule.ALWAYS: 'always', 
+    TriggerRule.ALL_SKIPPED: 'all_skipped', 
+    TriggerRule.NONE_FAILED_MIN_ONE_SUCCESS: 'none_failed_min_one_success', 
+    TriggerRule.NONE_FAILED: 'none_failed', 
+    TriggerRule.NONE_SKIPPED: 'none_skipped', 
+    TriggerRule.ALL_FAILED: 'all_failed', 
+    TriggerRule.ALL_DONE: 'all_done', 
+    TriggerRule.ONE_FAILED: 'one_failed', 
+    TriggerRule.ONE_SUCCESS: 'one_success'
+}
 
 '''
 
@@ -170,6 +170,7 @@ def create_dag(trigger_rule):
     upstream task --> upstream_failed, success(task29,task30)
     '''
     failure_fun33= PythonOperator(task_id="failure_fun33", python_callable=failure_fun, dag=dag)
+    # why trigger_rule="all_failed" is set here --> Though the parent is in failed state, need to execute this task for to get success state for this case
     success_fn34 = PythonOperator(task_id="success_fn34", python_callable=success_fun, dag=dag, trigger_rule="all_failed")
     upstream_failed35 = PythonOperator(task_id="upstream_failed35", python_callable=success_fun, dag=dag)
     task36 = PythonOperator(task_id="task36", python_callable=success_fun, dag=dag , trigger_rule =trigger_rule)
@@ -182,6 +183,7 @@ def create_dag(trigger_rule):
     upstream task --> upstream_failed, failed(task38,task39)
     '''
     failure_fun37= PythonOperator(task_id="failure_fun37", python_callable=failure_fun, dag=dag)
+    # why trigger_rule="all_failed" is set here --> Though the parent is in failed state, need to execute this task for to get failed state for this case other it will be in upstream failed
     upstream_failed38 = PythonOperator(task_id="upstream_failed38", python_callable=failure_fun, dag=dag, trigger_rule="all_failed")
     failed_fun39 = PythonOperator(task_id="failed_fun39", python_callable=success_fun, dag=dag)
     task40 = PythonOperator(task_id="task40", python_callable=success_fun, dag=dag , trigger_rule =trigger_rule)
@@ -193,6 +195,7 @@ def create_dag(trigger_rule):
     upstream task --> upstream_failed, skip(task42,task43)
     '''
     failure_fun41= PythonOperator(task_id="failure_fun41", python_callable=failure_fun, dag=dag)
+    # why trigger_rule="all_failed" is set here --> Though the parent is in failed state, need to execute this task for to get skip state for this case
     skip_task42 = PythonOperator(task_id="skip_task42", python_callable=skip_task, dag=dag, trigger_rule="all_failed")
     success_fun43 = PythonOperator(task_id="success_fun43", python_callable=success_fun, dag=dag)
     task44 = PythonOperator(task_id="task44", python_callable=success_fun, dag=dag , trigger_rule =trigger_rule)
@@ -217,7 +220,7 @@ def create_dag(trigger_rule):
     return dag
 
 
-trigger_rules = ["all_success","all_failed","all_done","all_skipped","one_failed","one_success","none_failed","none_failed_min_one_success","none_skipped","always","dummy"]
+trigger_rules = ["all_success","all_failed","all_done","all_skipped","one_failed","one_success","none_failed","none_failed_min_one_success","none_skipped","always","dummy","none_failed_or_skipped"]
 
 for trigger_rule in trigger_rules:
     globals()[trigger_rule]=create_dag(trigger_rule)

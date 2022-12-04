@@ -56,6 +56,13 @@ def branch_fn3(val):
 
 
 t1 = EmptyOperator(task_id="t1", dag=dag)
+
+''' 
+select_barnch1 >> [branch_task1,branch_task2] >> t2
+Since there is branch task before t2, which returns either branch1 or branch2. 
+So, only one of branch1 or branch2 task will be excuted and other will be skipped.
+By setting trigger rule as "one_success" to t2, indicates trigger this task if atleast one task is success.
+'''
 t2 = EmptyOperator(task_id="t2", dag=dag,trigger_rule=TriggerRule.ONE_SUCCESS)
 
 select_barnch1 = BranchPythonOperator(task_id="select_barnch1", python_callable=branch_fn, op_args = [12], dag=dag)
@@ -72,7 +79,21 @@ branch_task6 = EmptyOperator(task_id="branch_task6", dag=dag)
 
 
 t5 = EmptyOperator(task_id="t5", dag=dag)
+
+''' 
+select_barnch3 >> [branch_task5,branch_task6] >> t6
+In select_barnch3 task arg, negative number is given, so the callable fn doesn't return any branching task
+So, here both the branch tasks will be skipped 
+By setting trigger rule as "ALL_SKIPPED" to t6, indicates if both taks are skipped, trigger it.
+'''
 t6 = EmptyOperator(task_id="t6", dag=dag,trigger_rule=TriggerRule.ALL_SKIPPED)
+
+''' 
+select_barnch2 >> branch_task4 >> t5 >> t7
+Since there is branch task before t7, which returns either branch3 or branch4. 
+So, only one of branch1 or branch2 task will be excuted and other will be skipped.
+By setting trigger rule as "one_success" to t7, indicates trigger this task if atleast one task is success
+'''
 t7 = EmptyOperator(task_id="t7", dag=dag,trigger_rule=TriggerRule.ONE_SUCCESS)
 
 t1 >> select_barnch1 >> [branch_task1,branch_task2] >> t2 >> select_barnch2

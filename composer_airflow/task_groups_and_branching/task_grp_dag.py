@@ -38,7 +38,7 @@ with TaskGroup('task_group_parallel', tooltip='task_group_parallel', dag=dag) as
     
 task2= PythonOperator(task_id="task2", python_callable=print_hello, dag=dag)
 
-## series task group
+## series task group --> need to define task dependencies for tasks inside the task group
 with TaskGroup('task_group_series', tooltip='task_group_series', dag=dag) as task_group_series:
     series1= PythonOperator(task_id="series1", python_callable=print_hello, dag=dag)
     series2= PythonOperator(task_id="series2", python_callable=test, dag=dag)

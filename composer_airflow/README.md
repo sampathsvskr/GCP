@@ -40,15 +40,19 @@ dag = generate_dag()
 ```
 <br>
 
-### **[DAG Arguments](https://github.com/sampathsvskr/GCP/tree/main/composer_airflow/dag_arguments_and_variables)** to get idea of mostly used arguments.
+To get idea of mostly used arguments ### **[DAG Arguments](https://github.com/sampathsvskr/GCP/tree/main/composer_airflow/dag_arguments_and_variables)** 
+
 
 ### **[Operators](https://github.com/sampathsvskr/GCP/tree/main/composer_airflow/operators)** 
 
 
-### **[Trigger Rules](https://github.com/sampathsvskr/GCP/tree/main/composer_airflow/trigger_rules)** 
+Set dependencies between tasks ### **[Trigger Rules](https://github.com/sampathsvskr/GCP/tree/main/composer_airflow/trigger_rules)** 
 
-### **[XComs](https://github.com/sampathsvskr/GCP/tree/main/composer_airflow/xcoms)** 
+To share data/values between tasks ### **[XComs](https://github.com/sampathsvskr/GCP/tree/main/composer_airflow/xcoms)** 
 
-### **[Task Groups](https://github.com/sampathsvskr/GCP/tree/main/composer_airflow/task_groups_and_branching)** 
 
-### **[Branching](https://github.com/sampathsvskr/GCP/tree/main/composer_airflow/task_groups_and_branching)** 
+Collection of tasks as one ### **[Task Groups](https://github.com/sampathsvskr/GCP/tree/main/composer_airflow/task_groups_and_branching)** 
+
+Choosing tasks based on conditions ### **[Branching](https://github.com/sampathsvskr/GCP/tree/main/composer_airflow/task_groups_and_branching#branching)** 
+
+Task callbacks to act upon changes of state ### **[call_backs](https://airflow.apache.org/docs/apache-airflow/2.2.2/logging-monitoring/callbacks.html)**

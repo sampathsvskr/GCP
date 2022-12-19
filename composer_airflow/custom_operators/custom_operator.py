@@ -40,8 +40,8 @@ class BigQueryCustomExecuteQueryOperator(BaseOperator):
     
     def update_query_params(self , query) -> str:
         for param in re.findall(r'\{.*?\}', query):
-            param = re.sub(r'[\{\}]','',i)
-            query = query.replace(f'{{{param}}}', params[param])
+            param = re.sub(r'[\{\}]','',param)
+            query = query.replace(f'{{{param}}}', self.sql_params[param])
 
         return query
 
@@ -52,7 +52,7 @@ class BigQueryCustomExecuteQueryOperator(BaseOperator):
         else:
             query = self.query
 
-        sql_query = self.update_query_params(self, query) 
+        sql_query = self.update_query_params(query) 
         print(sql_query)       
 
         hook = BigQueryHook(

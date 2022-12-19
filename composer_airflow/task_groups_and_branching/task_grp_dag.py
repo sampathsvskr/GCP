@@ -82,7 +82,7 @@ with TaskGroup('task_group_xcom', tooltip='task_group_xcom', dag=dag) as task_gr
     parallel1= PythonOperator(task_id="xcom_push1", python_callable=push_xcom, dag=dag)
     parallel2= PythonOperator(task_id="xcom_push2", python_callable=push_xcom, dag=dag)
     
-task2= PythonOperator(task_id="task2", python_callable=print_hello, dag=dag)
+
  
 
 task1 >> task_group_parallel >> task2 >> task_group_series >> task3 >> task_group_nested >> task_group_nested2 >> task4 >> task_group_xcom

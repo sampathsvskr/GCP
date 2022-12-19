@@ -11,7 +11,7 @@ default_args = {
 }
    
 
-with DAG('main_dag', 
+with DAG('main_dag1', 
     schedule_interval='@daily', 
     default_args=default_args, 
     catchup=False) as dag:
@@ -23,7 +23,7 @@ with DAG('main_dag',
 
     trigger_dag_1 = TriggerDagRunOperator(
         task_id='trigger_sub_dag', 
-        trigger_dag_id= "sub_dag",
+        trigger_dag_id= "sub_dag1",
         execution_date = '{{ ds }}' , ## to set the same execution date as main dag for sub dag
         reset_dag_run = True, ##  Whether or not clear existing dag run if already exists
         wait_for_completion = True, ## Wait until this dag execution is completed.
@@ -31,7 +31,7 @@ with DAG('main_dag',
     )
 
     end_dag = BashOperator(
-        task_id='start_dag',
+        task_id='end_dag',
         bash_command='echo done..'
     )
 

@@ -11,8 +11,8 @@ default_args = {
 def _sample_fun():
     return "success"
 
-with DAG('sub_dag', 
-    #schedule_interval='@daily', 
+with DAG('sub_dag1', 
+    schedule_interval=None, 
     default_args=default_args, 
     catchup=False) as dag:
 

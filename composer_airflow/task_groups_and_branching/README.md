@@ -5,6 +5,7 @@ A TaskGroup is a collection of closely related tasks on the same DAG that should
 A TaskGroup is only a visual-grouping feature in the UI.<br>
 Currently, a TaskGroup is a visual-grouping feature nothing more, nothing less. <br>
 Therefore, this implies two things: TaskGroups are very lightweight, and easy to use but, you don’t have as much control over the tasks in the group.<br> 
+Task groups store XComs with `taskGroupID.taskID` <br>
 
 ### References 
 **[Artile by Marclamberti on Task Group](https://marclamberti.com/blog/airflow-taskgroups-all-you-need-to-know/)**

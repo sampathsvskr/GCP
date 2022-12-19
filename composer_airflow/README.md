@@ -50,9 +50,11 @@ Set dependencies between tasks => **[Trigger Rules](https://github.com/sampathsv
 
 To share data/values between tasks => **[XComs](https://github.com/sampathsvskr/GCP/tree/main/composer_airflow/xcoms)** 
 
-
-Collection of tasks as one => **[Task Groups](https://github.com/sampathsvskr/GCP/tree/main/composer_airflow/task_groups_and_branching)** 
+SubDags is deprecated hence TaskGroup is the preferred choice.
+Collection of tasks as one group => **[Task Groups](https://github.com/sampathsvskr/GCP/tree/main/composer_airflow/task_groups_and_branching)** 
 
 Choosing tasks based on conditions => **[Branching](https://github.com/sampathsvskr/GCP/tree/main/composer_airflow/task_groups_and_branching#branching)** 
 
 Task callbacks to act upon changes of state => **[call_backs](https://airflow.apache.org/docs/apache-airflow/2.2.2/logging-monitoring/callbacks.html)**
+
+Trigger a DAG from another DAG => **[TriggerDagRunOperator](https://github.com/sampathsvskr/GCP/tree/main/composer_airflow/TriggerDagRunOperator)**

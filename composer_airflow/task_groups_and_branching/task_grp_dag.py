@@ -72,8 +72,19 @@ with TaskGroup('task_group_nested2', tooltip='task_group_nested2', dag=dag) as t
     sub_task_grp11 >> nested3 >> nested4
     
 task4= PythonOperator(task_id="task4", python_callable=test, dag=dag)
+
+# check xcoms for task_group
+def push_xcom(ti):
+    models = ['Logistic', 'Decision Tree', 'XGBoost']
+    ti.xcom_push(key='ml_models', value=models)
+
+with TaskGroup('task_group_xcom', tooltip='task_group_xcom', dag=dag) as task_group_xcom:
+    parallel1= PythonOperator(task_id="xcom_push1", python_callable=push_xcom, dag=dag)
+    parallel2= PythonOperator(task_id="xcom_push2", python_callable=push_xcom, dag=dag)
+    
+task2= PythonOperator(task_id="task2", python_callable=print_hello, dag=dag)
  
 
-task1 >> task_group_parallel >> task2 >> task_group_series >> task3 >> task_group_nested >> task_group_nested2 >> task4
+task1 >> task_group_parallel >> task2 >> task_group_series >> task3 >> task_group_nested >> task_group_nested2 >> task4 >> task_group_xcom
     
     

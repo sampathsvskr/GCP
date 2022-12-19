@@ -1,0 +1,1 @@
+insert into {project}.{dataset}.{table}(id, name, location) values(1, 'ss', 'bglr'),(2, 'rr' , 'hybd')

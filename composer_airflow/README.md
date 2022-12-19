@@ -58,3 +58,9 @@ Choosing tasks based on conditions => **[Branching](https://github.com/sampathsv
 Task callbacks to act upon changes of state => **[call_backs](https://airflow.apache.org/docs/apache-airflow/2.2.2/logging-monitoring/callbacks.html)**
 
 Trigger a DAG from another DAG => **[TriggerDagRunOperator](https://github.com/sampathsvskr/GCP/tree/main/composer_airflow/TriggerDagRunOperator)**
+
+
+Decorators => **[Decorators](https://github.com/sampathsvskr/GCP/tree/main/composer_airflow/decorators)**
+
+
+Custom operators => **[Custom operator](https://github.com/sampathsvskr/GCP/tree/main/composer_airflow/custom_operators)**

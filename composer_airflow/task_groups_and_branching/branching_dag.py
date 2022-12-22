@@ -22,20 +22,11 @@ default_args= {
 
 dag = DAG("branching_test_dag",
            #schedule_interval=None,
-           catchup=True,
+           catchup=False,
            start_date=dates.days_ago(2),           
            default_args=default_args
                       
            )
-
-
-def branch_fn(val):
-    print(val)
-    
-    if val>10:
-        return "branch_task1"
-    else:
-        return "branch_task2"
     
 
 def branch_fn2(val):
@@ -65,9 +56,6 @@ By setting trigger rule as "one_success" to t2, indicates trigger this task if a
 '''
 t2 = EmptyOperator(task_id="t2", dag=dag,trigger_rule=TriggerRule.ONE_SUCCESS)
 
-select_barnch1 = BranchPythonOperator(task_id="select_barnch1", python_callable=branch_fn, op_args = [12], dag=dag)
-branch_task1 = EmptyOperator(task_id="branch_task1", dag=dag)
-branch_task2 = EmptyOperator(task_id="branch_task2", dag=dag)
 
 select_barnch2 = BranchPythonOperator(task_id="select_barnch2", python_callable=branch_fn2, op_args = [5], dag=dag)
 branch_task3 = EmptyOperator(task_id="branch_task3" , dag=dag)
@@ -96,30 +84,12 @@ By setting trigger rule as "one_success" to t7, indicates trigger this task if a
 '''
 t7 = EmptyOperator(task_id="t7", dag=dag,trigger_rule=TriggerRule.ONE_SUCCESS)
 
-t1 >> select_barnch1 >> [branch_task1,branch_task2] >> t2 >> select_barnch2
+t1 >> select_barnch2
 
 select_barnch2 >> branch_task3 >> t7
 select_barnch2 >> branch_task4 >> t5 >> t7
 
 t7 >> select_barnch3 >> [branch_task5,branch_task6] >> t6
-
-
-def branch_fn4():
-    val =10
-    if val:
-        return ["branch_task7","branch_task8"]
-    else:
-        return ["branch_task9","branch_task10"]
-
-select_barnch4 = BranchPythonOperator(task_id="select_barnch4", python_callable=branch_fn4 , dag=dag)
-branch_task7 = EmptyOperator(task_id="branch_task7", dag=dag)
-branch_task8 = EmptyOperator(task_id="branch_task8", dag=dag)
-branch_task9 = EmptyOperator(task_id="branch_task9", dag=dag)
-branch_task10 = EmptyOperator(task_id="branch_task10", dag=dag)
-
-t6 >> select_barnch4 >> [ branch_task7, branch_task8, branch_task9, branch_task10]
-    
-
 
 
 

@@ -8,11 +8,15 @@
 '''
 from airflow.models import BaseOperator
 from airflow.providers.google.cloud.hooks.bigquery import BigQueryHook
+from airflow.providers.google.cloud.hooks.gcs import GCSHook
 from airflow.exceptions import AirflowException
 import re
+from airflow.utils.decorators import apply_defaults
 
 # create our operator class with base class as `BaseOperator`
 class BigQueryCustomExecuteQueryOperator(BaseOperator):
+    template_fields = ['query'] # to replace the jinja templates if present in query string 
+    @apply_defaults
     def __init__(
                 self,
                 gcp_conn_id : str  ,
@@ -33,8 +37,12 @@ class BigQueryCustomExecuteQueryOperator(BaseOperator):
         self.sql_params = sql_params
         self.use_legacy_sql =use_legacy_sql
         self.gcp_conn_id = gcp_conn_id
-
-
+    
+    # read a file from GCS
+    def read_file_from_gcs(self,path : str):
+        gcs_hook=GCSHook(gcp_conn_id=self.gcp_conn_id)
+        return gcs_hook.download(bucket_name="test_bucket",object_name= path).decode('utf-8')
+    
     # method to read sql file and return query
     def read_sql_file(self) -> str:
         with open(self.sql_file_path) as f:
@@ -42,7 +50,7 @@ class BigQueryCustomExecuteQueryOperator(BaseOperator):
         return query
     
     # update the params in the query
-    def update_query_params(self , query) -> str:
+    def update_query_params(self , query : str) -> str:
         for param in re.findall(r'\{.*?\}', query):
             param = re.sub(r'[\{\}]','',param)
             query = query.replace(f'{{{param}}}', self.sql_params[param])
@@ -50,7 +58,7 @@ class BigQueryCustomExecuteQueryOperator(BaseOperator):
         return query
 
     # execute the query --> main method. Method name should be `execute` only
-    def execute(self , context):
+    def execute(self , context) -> str:
         query=""
         # get the sql file path or query
         if self.sql_file_path:

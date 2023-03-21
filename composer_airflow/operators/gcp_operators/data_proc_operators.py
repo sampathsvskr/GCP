@@ -8,6 +8,9 @@ from airflow.providers.google.cloud.operators.dataproc import (
             DataprocSubmitJobOperator
             
              )
+from airflow.providers.google.cloud.hooks.gcs import GCSHook
+from airflow.operators.python import PythonOperator
+
 
 project_id="<project_id>"
 region="<region>"
@@ -131,4 +134,23 @@ delete_cluster = DataprocDeleteClusterOperator(
     dag=dag
 )
 
-create_cluster >> pyspark_task >> delete_cluster
+def create_touch_file(run_date, **context):
+    gcshook= GCSHook(gcp_conn_id=gcp_conn_id)
+    gcshook.upload(
+        bucket_name = "<bucket_name>",
+        object_name = "test.done",
+        filename=None #local path to the file
+        data=f'run_date:{run_date}',
+        encoting='utf-8'
+    )
+create_touch_file_task= PythonOperator(
+        task_id = "create_file",
+        python_callable= create_touch_file,    
+        provide_context=True,
+        op_kwargs = {
+            "run_date":'{{ execution_date }}'
+        }
+        dag=dag
+    )
+
+create_cluster >> pyspark_task >> pig_task >> delete_cluster >> create_touch_file_task

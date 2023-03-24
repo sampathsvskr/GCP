@@ -4,6 +4,7 @@ https://cloud.google.com/python/docs/reference/bigquery/latest/google.cloud.bigq
 https://www.programcreek.com/python/example/115622/google.cloud.bigquery.QueryJobConfig
 https://github.com/GoogleCloudPlatform/python-docs-samples/blob/main/notebooks/rendered/bigquery-basics.md
 https://github.com/GoogleCloudDataproc/spark-bigquery-connector
+https://medium.com/google-cloud/apache-spark-bigquery-connector-optimization-tips-example-jupyter-notebooks-f17fd8476309
 
 
 ## sample pandas data frame
@@ -162,6 +163,14 @@ spark.read.bigquery("bigquery-public-data:samples.shakespeare")\
   .select("word")\
   .where("word = 'Hamlet' or word = 'Claudius'")\
   .collect()
+```
+```python
+table = "bigquery-public-data.wikipedia.pageviews_2019"
+df_wiki_pageviews = spark.read \
+  .format("bigquery") \
+  .option("table", table) \
+  .option("filter", "datehour >= '2019-01-01' AND datehour < '2019-01-08'") \
+  .load()
 ```
 
 ## writing spark dataframe

@@ -1,0 +1,4 @@
+{"PlayerName":"Butler","Age":29,"Team":"RR","Performance":[{"MatchNo":1,"Runs":75,"Wickets":"NotBowled","Catches":2},{"MatchNo":2,"Runs":25,"Wickets":"NotBowled","Catches":0},{"MatchNo":3,"Runs":56,"Wickets":"NotBowled","Catches":1}]}
+{"PlayerName":"Hardhik","Age":27,"Team":"GT","Performance":[{"MatchNo":1,"Runs":43,"Wickets":"2","Catches":1},{"MatchNo":2,"Runs":67,"Wickets":"NotBowled","Catches":1},{"MatchNo":3,"Runs":56,"Wickets":"1","Catches":1}]}
+{"PlayerName":"Rahul","Age":28,"Team":"LSG","Performance":[{"MatchNo":1,"Runs":5,"Wickets":"NotBowled","Catches":2},{"MatchNo":2,"Runs":25,"Wickets":"NotBowled","Catches":3},{"MatchNo":3,"Runs":16,"Wickets":"NotBowled","Catches":1}]}
+{"PlayerName":"Chahal","Age":27,"Team":"KKR","Performance":[{"MatchNo":1,"Runs":0,"Wickets":"3","Catches":2},{"MatchNo":2,"Runs":2,"Wickets":"2","Catches":0},{"MatchNo":3,"Runs":6,"Wickets":"1","Catches":1}]}

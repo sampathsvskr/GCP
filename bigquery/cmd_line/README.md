@@ -37,4 +37,80 @@ bq load \
 --skip_leading_rows=1 \
 nyctaxi.2018trips \
 /home/cloud-training/OCBL013/nyc_tlc_yellow_trips_2018_subset_2.csv
+
+```
+
+## Query table
+
+```
+bq query --location=us-east4 \
+--user_legacy_sql=false \
+"
+SELECT * FROM `project.dataset.table`;
+"
+```
+
+## Parameterized queries
+```
+bq query \
+--use_legacy_sql=false \
+--parameter=country::IN \  #param_name:datatype:value  , for string not necessary to specify
+--parameter=date:DATE:2021-10-10 \
+'
+SELECT 
+country_name,
+EXTRACT(month FROM date) as month,
+EXTRACT(year FROM date) as year,
+SUM(cumulative_confirmed) as cum_sum_cases
+FROM `bigquery-public-data.covid19_open_data.covid19_open_data`
+WHERE country_code=@country and date < @date 
+GROUP BY 1,2,3
+ORDER BY 1,2,3;
+'
+```
+
+## Positional Parameterized queries
+```
+bq query \
+--use_legacy_sql=false \
+--parameter=::IN \  #:datatype:value  , for string not necessary to specify
+--parameter=:DATE:2021-10-10 \
+'
+SELECT 
+country_name,
+EXTRACT(month FROM date) as month,
+EXTRACT(year FROM date) as year,
+SUM(cumulative_confirmed) as cum_sum_cases
+FROM `bigquery-public-data.covid19_open_data.covid19_open_data`
+WHERE country_code=? and date < ? 
+GROUP BY 1,2,3
+ORDER BY 1,2,3;
+'
+```
+
+## Get the deleted table.
+We can get the deleted table data if it is less than 7 days from deletion.
+It represnets current time - 3600000
+```
+bq cp dataset_demo.table@-3600000 dataset_demo.table_restored
+```
+
+## Schedule script
+
+bq query \
+--use_legacy_sql=false \
+--display_name="Scheduled script" \
+--location="us-east4" \
+--schedule="every 24 hours"
+'
+CREATE OR REPLACE project.dataet.table AS 
+SELECT 
+country_name,
+EXTRACT(month FROM date) as month,
+EXTRACT(year FROM date) as year,
+SUM(cumulative_confirmed) as cum_sum_cases
+FROM `bigquery-public-data.covid19_open_data.covid19_open_data`
+GROUP BY 1,2,3
+ORDER BY 1,2,3;
+'
 ```

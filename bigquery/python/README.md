@@ -77,7 +77,53 @@ table = client.create_table(table)
 print(f"Table created : {table.project}.{table.dataset_id}.{table.table_id}")
 
 ```
+## Create external table
+```python
+from google.cloud import bigquery
 
+client = bigquery.Client()
+#Define your schema
+schema = [
+    {
+        "name": "id",
+        "type": "INTEGER",
+        "mode": "REQUIRED"
+    },
+    {
+        "name": "name",
+        "type": "STRING",
+        "mode": "NULLABLE"
+    }
+]
+
+
+
+#dataset_ref = client.dataset('<your-dataset>')
+#table_ref = bigquery.TableReference(dataset_ref, '<your-table-name>')
+#table = bigquery.Table(table_ref, [schemafield_col1,schemafield_col2])
+
+# configs to external table
+dataset_ref = bigquery.DatasetReference('<project>','<dataset>')
+table = bigquery.Table(dataset_ref.table('<table_name>'),schema=schema)
+
+external_config = bigquery.ExternalConfig('CSV')
+# source file uri
+source_uris = ['<url-to-your-external-source>'] #i.e for a csv file in a Cloud Storage bucket 
+                                              #it would be something like "gs://<your-bucket>/<your-csv-file>"
+external_config.source_uris = source_uris
+external_config.options.skip_leading_rows=1
+table.external_data_configuration = external_config
+
+# create table
+table = client.create_table(table)
+
+#query table
+query_job = client.query(f'select * from {dataset_id}.{table_id}')
+results = query_job.result()
+for row in results:
+  print(row)
+
+```
 
 ## Run a query
 ```python
@@ -89,7 +135,41 @@ query_job = client.query(
     LIMIT 10"""
 )
 
-results = query_job.result()  # wait for the job to complete  # Waits for job to complete.
+results = query_job.result()  # wait for the job to complete
+for row in results:
+    print("{} : {} views".format(row[0], row[1]))
+
+df = query_job.to_dataframe()
+```
+
+## Run a parameterized query
+```python
+
+query = """
+SELECT 
+country_name,
+EXTRACT(month FROM date) as month,
+EXTRACT(year FROM date) as year,
+SUM(cumulative_confirmed) as cum_sum_cases
+FROM `bigquery-public-data.covid19_open_data.covid19_open_data`
+WHERE country_code=@country and date < @date
+GROUP BY 1,2,3
+ORDER BY 1,2,3;
+"""
+# job config
+job_config = bigquery.QueryJobConfig(
+  #query params
+  query_parameters=[
+    bigquery.ScalarQueryParameter('country','STRING','IN'),
+    bigquery.ScalarQueryParameter('date','DATE','2021-10-10'),
+  ]
+)
+query_job = client.query(
+  query,
+  job_config=job_config    
+)
+
+results = query_job.result()  # wait for the job to complete
 for row in results:
     print("{} : {} views".format(row[0], row[1]))
 

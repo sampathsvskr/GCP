@@ -1,6 +1,8 @@
 
 [Airlflow commands doc](https://airflow.apache.org/docs/apache-airflow/stable/cli-and-env-variables-ref.html)
 
+For composer instead of ```airflow``` use ```gcloud composer environments run <ENVIRONMENT_NAME>```
+
 - ```airflow dags list``` - list the dags
 - ```airflow dags delete <DAG_ID>``` - delete the dag
 - ```airflow dags show <DAG_ID>``` - Show structure and dependencies of DAG

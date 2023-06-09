@@ -44,7 +44,7 @@ nyctaxi.2018trips \
 
 ```
 bq query --location=us-east4 \
---user_legacy_sql=false \
+--use_legacy_sql=false \
 "
 SELECT * FROM `project.dataset.table`;
 "

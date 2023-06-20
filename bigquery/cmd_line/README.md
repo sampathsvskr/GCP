@@ -18,6 +18,13 @@ bq --location=us-east4 mk \
 id:integer,name:string,location:string
 ```
 
+```
+bq  mk \
+--table \
+--schema sample_schema.json \
+<dataset_name>.<table_name> 
+```
+
 ## Load csv data in gcs to bigquery
 
 ```

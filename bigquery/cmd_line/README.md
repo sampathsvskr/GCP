@@ -25,6 +25,14 @@ bq  mk \
 <dataset_name>.<table_name> 
 ```
 
+```
+bq  mk \
+--table \
+--schema sample_schema.json \
+--time_partitioning_field transaction_time \
+<dataset_name>.<table_name> 
+```
+
 ## Load csv data in gcs to bigquery
 
 ```

@@ -5,12 +5,12 @@ from airflow import DAG
 from airflow.utils.dates import days_ago
 from airflow.operators.bash import BashOperator
 
-# set the directory to acceess files from
+# set the directory to acceess files from airflow folder
 import site
 site.addsitedir('/home/airflow/gcs/dags/')
 
 # import the custom operator - make sure the custom file is in the site directory set
-from custom_operator import BigQueryCustomExecuteQueryOperator
+from custom_operators.custom_operator import BigQueryCustomExecuteQueryOperator
 
 default_args = {
     'owner': 'airflow',

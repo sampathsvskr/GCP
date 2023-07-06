@@ -40,6 +40,15 @@ project_id = 'qwiklabs-gcp-00-73bbdba69620'
 client = bigquery.Client(project=project_id)
 ```
 
+## Create bigquery client using service account
+```python
+from google.cloud import bigquery
+from google.oauth2 import service_account
+credentials = service_account.Credentials.from_service_account_file('path/to/file.json')
+
+project_id = 'my-bq'
+client = bigquery.Client(credentials= credentials,project=project_id)
+```
 
 ## Create dataset
 ```python

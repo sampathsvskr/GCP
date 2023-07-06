@@ -293,6 +293,15 @@ job.result()  # wait for the job to complete # Wait for job to finish
 
 ## Spark DataFrame
 
+## connect to bigquery using pyspark
+https://github.com/GoogleCloudDataproc/spark-bigquery-connector
+```python
+# Globally
+spark.conf.set("credentialsFile", "</path/to/key/file>")
+# Per read/Write
+spark.read.format("bigquery").option("credentialsFile", "</path/to/key/file>")
+```
+
 sample df
 ```python
 from pyspark.sql import SparkSession

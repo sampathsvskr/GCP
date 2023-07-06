@@ -4,7 +4,7 @@ https://gcloud.readthedocs.io/en/latest/bigquery-client.html
 https://cloud.google.com/python/docs/reference/bigquery/latest/google.cloud.bigquery.job.QueryJobConfig
 https://www.programcreek.com/python/example/115622/google.cloud.bigquery.QueryJobConfig
 https://github.com/GoogleCloudPlatform/python-docs-samples/blob/main/notebooks/rendered/bigquery-basics.md
-https://github.com/GoogleCloudDataproc/spark-bigquery-connector
+https://github.com/GoogleCloudDataproc/spark-bigquery-connector <br>
 https://medium.com/google-cloud/apache-spark-bigquery-connector-optimization-tips-example-jupyter-notebooks-f17fd8476309
 
 

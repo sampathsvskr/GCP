@@ -117,6 +117,39 @@ PARTITION BY
     RANGE_BUCKET(id,GENERATE_ARRAY(0,123456,10000));
 ```
 
+## Create table with struct type columns
+```sql
+
+CREATE OR REPLACE TABLE dataset.student_records
+ (
+   rollNo INT ,
+   info STRUCT<
+     name STRING,
+     age INT,
+     department STRING
+   >
+ )
+ ```
+
+ ## Create table with struct and array type columns
+ ```sql
+CREATE OR REPLACE TABLE mydataset.student_records
+ (
+   rollNo INT ,
+   info STRUCT<
+     name STRING,
+     age INT,
+     department STRING
+   >,
+   scores ARRAY<
+      STRUCT<
+        subject STRING,
+        marks INT
+        >
+      >
+ )
+ ```
+
 # DDL
 
 ***[Bigquery DDL doc](https://cloud.google.com/bigquery/docs/reference/standard-sql/data-definition-language)***

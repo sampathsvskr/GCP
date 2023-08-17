@@ -6,6 +6,7 @@ https://www.programcreek.com/python/example/115622/google.cloud.bigquery.QueryJo
 https://github.com/GoogleCloudPlatform/python-docs-samples/blob/main/notebooks/rendered/bigquery-basics.md
 https://github.com/GoogleCloudDataproc/spark-bigquery-connector <br>
 https://medium.com/google-cloud/apache-spark-bigquery-connector-optimization-tips-example-jupyter-notebooks-f17fd8476309
+https://cloud.google.com/bigquery/docs/loading-data-cloud-storage-csv#python
 
 
 

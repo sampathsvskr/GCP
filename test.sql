@@ -11,5 +11,5 @@ SELECT
   step_in_flag as stepin_flg,
   
 FROM 
-    `{}.bq_34_tcu4g_feature_fdp_dwc_vw.ncvdc62_fnv2_psa_vw`
+     wam.wam_pivot
 

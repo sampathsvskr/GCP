@@ -18,7 +18,7 @@ from pyspark import StorageLevel
 import pyspark.sql.functions as f
 from pyspark.sql.functions import col, desc, to_timestamp
 from pyspark.sql.window import Window
-from pyspark.sql.types import StringType, StructField, StructType,IntegerType, DoubleType, TimestampType
+from pyspark.sql.types import StringType, StructField, StructType,IntegerType, DoubleType, TimestampType, FloatType, DateType
 from pyspark import rdd
 
 
@@ -436,8 +436,8 @@ class WAMBase:
         
         self.logger.info('FetchTimeSeries >>> End')
                  
-    @staticmethod    
-    def run_model_vin_group(vin_partition):
+     
+    def run_model_vin_group(self,vin_main_df):
 
         ### Hard coded model parameters ######################################################
         hit_cnt1_thresh = 30 # Threshold for hit counter 1
@@ -450,7 +450,19 @@ class WAMBase:
         
         try:
 
-            vin_main_df = vin_partition.toDF()
+            #vin_main_df = vin_partition.toDF()
+            SCHEMA_FOR_TRAINING_OUTPUT_DF = StructType([
+                StructField('vin', StringType()) ,
+                StructField('model', StringType()) ,
+                StructField('year', IntegerType()) ,
+                StructField('date', DateType()) ,
+                StructField('flg_date', StringType()) ,    
+                StructField('flag', StringType()), 
+                StructField('flag_last', StringType()),
+                StructField('trips_since_flag', IntegerType()),
+                StructField('n_data', IntegerType()),
+            ])
+            model_df = self.spark.createDataFrame([],SCHEMA_FOR_TRAINING_OUTPUT_DF)
 
             vins = vin_main_df.select('vin').distinct().collect()
 
@@ -460,29 +472,31 @@ class WAMBase:
             # Discarding vins which has data points < 100
             vin_main_df = vin_main_df.join(vin_count_df,on='vin',how='inner')
             
-            model_list = []
 
-            
-
-            for vin in vins:
+            for row in vins:
              
-                vv = vin
-                vin_df = vin_main_df.filter(f"vin = '{vin}'")
+                vv = row.vin
+                vin_df = vin_main_df.filter(f"vin = '{vv}'")
                 
                 flag_current = 1 # start on flag 1: no mis-alignment
                 flag_last = 1 # start on flag 1: no mis-alignment
+                total = vin_df.count()
 
                 vin_df = vin_df.withColumn('timestamp',f.to_timestamp('timestamp')) \
                                 .orderBy('timestamp')
                 
-                m_model = vin_df['veh_model'].iloc[0]
+                vin_data = vin_df.take(1)[0]
+                m_model = vin_data['veh_model']
                 if not m_model:
                     m_model = 'null'
-                m_year = pd.to_numeric(vin_df['year'].iloc[0], errors='coerce')
+                
+                m_year = vin_data['year']
+                try:
+                    m_year = int(m_year)
+                except ValueError:
+                    m_year = 1900
 
-                if np.isnan(m_year):
-                    m_year = 1900                   
-                m_date = vin_df['date'].iloc[0] 
+                m_date = vin_data['date']
                 if not m_date:
                     m_date = '2020-01-01'
                 m_flg_date = []    
@@ -492,31 +506,35 @@ class WAMBase:
 
                 vin_df = vin_df.withColumn('just_date',f.to_date('timestamp'))
                 
-                day_list = vin_df['just_date'].distinct().collect()
+                day_list = vin_df.select('just_date').distinct().collect()
                 
                 #Current vehicles information, if any flag was set previously
-                if vin_df['flag'].iloc[0] is not None:
+                flag = vin_data['flag']
+                if flag is not None:
                     vin_df['flag'] = pd.to_numeric(vin_df['flag']).astype(float)
-                    if vin_df['flag'].iloc[0] > 1:
-                        flag_current = vin_df['flag'].iloc[0]
-                        m_t_flag = vin_df['trips_since_flag'].iloc[0]
+                    vin_df = vin_df.withColumn('flag',f.col('falg').cast(FloatType()))
+                    if float(flag) > 1:
+                        flag_current = flag
+                        m_t_flag = vin_data['trips_since_flag']
                         vin_df = vin_df.filter('timestamp > flg_date')
                         
                 
                 for day in day_list:
+                    day = day.just_date
                     
-                    df_tmp = vin_df.filterf("just_date <= '{day}'")
+                    df_tmp = vin_df.filter(f"just_date <= '{day}'")
                     
                     if df_tmp.count() < npoints:
                         continue
                     
-                    df_tmp = df_tmp.orderBt('timestamp')
+                    df_tmp = df_tmp.orderBy('timestamp')
                     df_tmp = df_tmp.limit(npoints)
                     
                     ################################## Model Logic #####################################
                     
-                    flag_end = df_tmp['stepin_flg'].iloc[0]
-                    current_date = df_tmp['just_date'].iloc[0]
+                    df_tmp_data = df_tmp.take(1)[0]
+                    flag_end = df_tmp_data['stepin_flg']
+                    current_date = df_tmp_data['just_date']
 
                     window_spec = Window.orderBy("timestamp")
                     df_tmp = df_tmp.withColumn("diff_hc1", f.col("hitcount1") - f.lag("hitcount1", 1).over(window_spec)) \
@@ -525,8 +543,8 @@ class WAMBase:
                     
                     hc1_maxed = df_tmp.filter(f"hitcount1 == {hit_cnt1_max}").count()
                     hc2_maxed = df_tmp.filter(f"hitcount2 == {hit_cnt2_max}").count()
-                    hc1_up = df_tmp.filter(f"diff_hc1 > 0").count()
-                    hc2_up = df_tmp.filter(f"diff_hc2 > 0").count()
+                    hc1_up = df_tmp.filter("diff_hc1 > 0").count()
+                    hc2_up = df_tmp.filter("diff_hc2 > 0").count()
                     
                     hc1_isallzero = False
                     hc2_isallzero = False
@@ -535,10 +553,10 @@ class WAMBase:
                     hc1_isallmax = False
                     hc2_isallmax = False
                     
-                    if len(df_tmp[df_tmp['hitcount1']==0]) == npoints:
+                    if df_tmp.filter("diff_hc1 = 0").count() == npoints:
                          hc1_isallzero = True
                             
-                    if len(df_tmp[df_tmp['hitcount2']==0]) == npoints:
+                    if df_tmp.filter("diff_hc2 = 0").count() == npoints:
                          hc1_isallzero = True   
 
                     if hc1_up > npoints/2.:
@@ -614,9 +632,11 @@ class WAMBase:
                               "trips_since_flag": int(m_t_flag),
                               "n_data": int(total)
                     }
-                    model_list.append(result)
                     
-            return model_list
+                    model_df = model_df.union(WAMBase.spark.createDataFrame([result]))
+                    
+                    
+            return model_df
 
         except Exception as error:
             logging.exception("Error occurred in run_model_vin_group function: \n{}".format(error))
@@ -751,10 +771,10 @@ class WAMBase:
 
         self.logger.info('RunModel >>> Running model on partitioned dataframe')
         
-        model_output = vin_partitioned_dataframe.rdd.mapPartitions(WAMBase.run_model_vin_group, True)
+        model_output_df = self.run_model_vin_group(vin_partitioned_dataframe)
 
         self.logger.info('RunModel >>> Mapping output dataframe')
-        model_output_df = map_to_df(self.spark, model_output)
+        #model_output_df = map_to_df(self.spark, model_output)
         # model_output_df.printSchema()
         
         num_of_vins_trained = model_output_df.select('vin').distinct().count()
